@@ -19,6 +19,9 @@
     <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\TeacherTimer.exe">
       <PackagePath>TeacherTimer.exe</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll">
+      <PackagePath>Newtonsoft.Json.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\Logo.scale-240.png">
       <PackagePath>Assets\Logo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>

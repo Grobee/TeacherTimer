@@ -30,3 +30,7 @@ E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\qualifiers.txt
 E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\qualifiers.txt.intermediate
 E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\ProjectArchitectures.txt
+E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\Newtonsoft.Json.dll
+E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\Newtonsoft.Json.xml
+E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\TeacherTimer.csprojResolveAssemblyReference.cache
+E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\TeacherTimer.csproj.GenerateResource.Cache

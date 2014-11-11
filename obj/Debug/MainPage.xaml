@@ -9,15 +9,15 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <!-- the bottom bar -->
     <Page.BottomAppBar>
-        <CommandBar Height="35"
+        <CommandBar Height="41"
                     Foreground="{ThemeResource PhoneAccentBrush}">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="about"
                               x:Name="aboutButton"/>
             </CommandBar.SecondaryCommands>
             
-            <AppBarButton Icon="Play" 
-                          x:Name="actionButton"/>
+            <AppBarButton x:ConnectionId='1' Icon="Play" 
+                          x:Name="actionButton"                           />
         </CommandBar>
     </Page.BottomAppBar>
 
@@ -68,8 +68,9 @@
                 </Grid.RowDefinitions>
 
                 <!-- text definitons -->                
-                <TextBlock Grid.Row="0"
-                           Text="15 / 20 hours"
+                <TextBlock x:Name="textBlockHoursDone"
+                           Grid.Row="0"
+                           Text="15 out of 20 hours"
                            Margin="25,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
@@ -98,13 +99,14 @@
                 </Grid.RowDefinitions>
 
                 <!-- text definitons -->
-                <TextBlock Grid.Row="0"
-                           Text="5 hour"
+                <TextBlock x:Name="textBlockLongestStreak"
+                           Grid.Row="0"
+                           Text="5 hours"
                            Margin="25,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="1" 
-                           Text="best streak"
+                           Text="longest streak"
                            Margin="50,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
@@ -119,7 +121,8 @@
                 </Grid.RowDefinitions>
 
                 <!-- text definitons -->
-                <TextBlock Grid.Row="0"
+                <TextBlock x:Name="textBlockStartTime"
+                           Grid.Row="0"
                            Text="21:59:11"
                            Margin="25,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
