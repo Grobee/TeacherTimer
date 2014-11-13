@@ -1,1 +1,1 @@
-E:\Programming\C#\LearningWP\TeacherTimer\TeacherTimer.csproj;neutral
+D:\Programming\C#\WinPhone\TeacherTimer\TeacherTimer.csproj;neutral

@@ -8,27 +8,19 @@ namespace TeacherTimer
 {
     public class Timer
     {
-        Work work;
-
-        /* constructor */
-        public Timer(Work work) 
-        {
-            this.work = work;
-        }
         /* start the timer */
-        public void Start()
+        public void Start(Work work)
         {
             work.InProgress = true;
-
             work.StartTime = DateTime.Now;
         }
         /* stop the timer */
-        public void Stop()
+        public void Stop(Work work)
         {
             work.InProgress = false;
         }
         /* reset the timer */
-        public void Reset()
+        public void Reset(Work work)
         {
             work.InProgress = false;
         }        

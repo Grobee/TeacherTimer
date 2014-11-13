@@ -1,61 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Machine>FIRECRACKER</Machine>
+    <Machine>FROSTBOLT</Machine>
     <WindowsUser>Róbert</WindowsUser>
     <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
     <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
     <PackageArchitecture>neutral</PackageArchitecture>
     <PackageIdentityName>044fe649-4d28-4e26-a4d5-5b4aaa380762</PackageIdentityName>
-    <IntermediateOutputPath>E:\Programming\C#\LearningWP\TeacherTimer\obj\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\AppxManifest.xml">
+    <AppXManifest Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\TeacherTimer.exe">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\TeacherTimer.exe">
       <PackagePath>TeacherTimer.exe</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\Newtonsoft.Json.dll">
       <PackagePath>Newtonsoft.Json.dll</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\Logo.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\Logo.scale-240.png">
       <PackagePath>Assets\Logo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\SmallLogo.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\SmallLogo.scale-240.png">
       <PackagePath>Assets\SmallLogo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\SplashScreen.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\SplashScreen.scale-240.png">
       <PackagePath>Assets\SplashScreen.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\Square71x71Logo.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\Square71x71Logo.scale-240.png">
       <PackagePath>Assets\Square71x71Logo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\StoreLogo.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\StoreLogo.scale-240.png">
       <PackagePath>Assets\StoreLogo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\Assets\WideLogo.scale-240.png">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\WideLogo.scale-240.png">
       <PackagePath>Assets\WideLogo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\App.xbf">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\MainPage.xbf">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\TeacherTimer.xr.xml">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\TeacherTimer.xr.xml">
       <PackagePath>TeacherTimer.xr.xml</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\Programming\C#\LearningWP\TeacherTimer\bin\Debug\resources.pri">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
     </AppxPackagedFile>
   </ItemGroup>

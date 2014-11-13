@@ -24,6 +24,7 @@ namespace TeacherTimer
     {
         Timer timer;
         Work work;
+        FileService fileSerivce;
 
         struct FormattedTime
         {
@@ -37,9 +38,9 @@ namespace TeacherTimer
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            work = new Work(); 
-            timer = new Timer(work);                    
+            
+            timer = new Timer();
+            fileSerivce = new FileService();
         }
 
         /// <summary>
@@ -47,33 +48,69 @@ namespace TeacherTimer
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
-            SetStatistics();
+            work = await fileSerivce.ReadJsonAsync();
+            work = new Work()
+            {
+                ElapsedHours = 0,
+                ElapsedMinutes = 0,
+                HoursDone = 0,
+                InProgress = false,
+                LongestStreak = 0,
+                StartTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0)
+            };
+            this.SetStatistics();
         }
 
-        private void actionButton_Click(object sender, RoutedEventArgs e)
+        private async void actionButton_Click(object sender, RoutedEventArgs e)
         {
             if (!work.InProgress)
             {
                 actionButton.Icon = new SymbolIcon(Symbol.Pause);
-                timer.Start();
-                SetStatistics();
+                timer.Start(work);
+                this.SetStatistics();
+                await fileSerivce.WriteJsonAsync(work);
             }                
             else
             {
                 actionButton.Icon = new SymbolIcon(Symbol.Play);
-                timer.Stop();
+                /* see if an hour has passed */
+                this.OneHourPassed();
+                work.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);                
+                timer.Stop(work);
+                this.SetStatistics();
+                /* write it to "memory" */
+                await fileSerivce.WriteJsonAsync(work);                
             }                
         }
 
+        private void OneHourPassed()
+        {
+            int hoursPassed = DateTime.Now.Hour - work.StartTime.Hour;
+            int minutesPassed = DateTime.Now.Minute - work.StartTime.Minute;
+
+            if (hoursPassed > 1 || hoursPassed == 1 && minutesPassed >= 0)
+                work.HoursDone += hoursPassed;
+            /* see if the person broke the record hours */
+            if (hoursPassed > work.LongestStreak)
+                if (minutesPassed < 0)
+                    work.LongestStreak = --hoursPassed;
+                else
+                    work.LongestStreak = hoursPassed;
+
+            /*if (Math.Abs(minutesPassed) > work.LongestStreak)
+                if (minutesPassed < 0)
+                    work.LongestStreak = --minutesPassed;
+                else
+                    work.LongestStreak = minutesPassed;
+
+            if (Math.Abs(minutesPassed) >= 1)
+                work.HoursDone += Math.Abs(minutesPassed); */
+
+        }
+
+        /* update the frame */
         private void SetStatistics()
         {
             FormattedTime formattedTime;
@@ -86,7 +123,7 @@ namespace TeacherTimer
             if (!work.InProgress)
                 textBlockStartTime.Text = "not started yet";
             else
-                textBlockStartTime.Text = formattedTime.Hours + ":" + formattedTime.Minutes + ":" + formattedTime.Seconds;
+                textBlockStartTime.Text = formattedTime.Hours + ":" + formattedTime.Minutes + ":" + formattedTime.Seconds;           
         }
 
         /* format time so that it will be displayed correctly*/
