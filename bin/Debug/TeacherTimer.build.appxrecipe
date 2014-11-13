@@ -19,7 +19,7 @@
     <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\TeacherTimer.exe">
       <PackagePath>TeacherTimer.exe</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\Newtonsoft.Json.dll">
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll">
       <PackagePath>Newtonsoft.Json.dll</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\Assets\Logo.scale-240.png">
@@ -48,6 +48,9 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\BasicPage1.xbf">
+      <PackagePath>BasicPage1.xbf</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>

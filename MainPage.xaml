@@ -12,8 +12,9 @@
         <CommandBar Height="41"
                     Foreground="{ThemeResource PhoneAccentBrush}">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="about"
-                              x:Name="aboutButton"/>
+                <AppBarButton Label="reset"
+                              x:Name="resetButton"
+                              Click="resetButton_Click"/>
             </CommandBar.SecondaryCommands>
             
             <AppBarButton Icon="Play" 
@@ -133,6 +134,7 @@
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
+            <TextBlock x:Name="intervalTime" HorizontalAlignment="Left" Margin="97,25.667,0,0" Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         </Grid>           
     </Grid>
 </Page>

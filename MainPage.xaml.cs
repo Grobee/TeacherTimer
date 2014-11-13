@@ -22,9 +22,10 @@ namespace TeacherTimer
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Timer timer;
         Work work;
+        Session session;
         FileService fileSerivce;
+        DispatcherTimer timer;
 
         struct FormattedTime
         {
@@ -37,10 +38,10 @@ namespace TeacherTimer
         {
             this.InitializeComponent();
 
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Required;            
             
-            timer = new Timer();
             fileSerivce = new FileService();
+            timer = new DispatcherTimer();            
         }
 
         /// <summary>
@@ -50,8 +51,8 @@ namespace TeacherTimer
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            work = await fileSerivce.ReadJsonAsync();
-            work = new Work()
+            session = await fileSerivce.ReadJsonAsync();
+            /*session = new Session()
             {
                 ElapsedHours = 0,
                 ElapsedMinutes = 0,
@@ -59,71 +60,74 @@ namespace TeacherTimer
                 InProgress = false,
                 LongestStreak = 0,
                 StartTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0)
-            };
+            };*/
+            work = new Work(ref session);
             this.SetStatistics();
+            this.SetFirstTime();
         }
-
+ 
+        private void SetTimer()
+        {
+            /* count the time that is still remaining from the one hour interval */
+            int doneHours = session.ElapsedMinutes == 0 ? 0 : 1;
+            int doneMinutes = session.ElapsedMinutes == 0 ? 60 : session.ElapsedMinutes;
+            /* set the interval */
+            //timer.Interval = new TimeSpan(1 - doneHours, 60 - doneMinutes, 0);
+            timer.Interval = new TimeSpan(0, 0, 30);
+            //intervalTime.Text = timer.Interval.Hours + " " + timer.Interval.Minutes;
+            //intervalTime.Text = session.ElapsedHours + " " + session.ElapsedMinutes;
+            intervalTime.Text = timer.Interval.Minutes + " " + timer.Interval.Seconds;
+            timer.Start();
+            timer.Tick += (o, i) =>
+            {
+                work.CheckTime();
+                this.SetStatistics();
+                this.SetTimer();
+            };                
+        }
+    
         private async void actionButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!work.InProgress)
-            {
+            if (!session.InProgress)
+            {                
                 actionButton.Icon = new SymbolIcon(Symbol.Pause);
-                timer.Start(work);
+                work.Start();
+                /* set the various textblock texts */
+                this.SetFirstTime();
+                this.SetTimer();
                 this.SetStatistics();
-                await fileSerivce.WriteJsonAsync(work);
+                /* save the data to a json file */
+                await fileSerivce.WriteJsonAsync(session);
             }                
             else
             {
-                actionButton.Icon = new SymbolIcon(Symbol.Play);
-                /* see if an hour has passed */
-                this.OneHourPassed();
-                work.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);                
-                timer.Stop(work);
+                actionButton.Icon = new SymbolIcon(Symbol.Play);                               
+                work.Stop();
+                work.CheckLongestStreak();
+                /* set the various textblock texts */
+                this.SetFirstTime();
                 this.SetStatistics();
-                /* write it to "memory" */
-                await fileSerivce.WriteJsonAsync(work);                
-            }                
+                /* save the data to a json file */
+                await fileSerivce.WriteJsonAsync(session);    
+            }
         }
-
-        private void OneHourPassed()
+    
+        private void SetFirstTime()
         {
-            int hoursPassed = DateTime.Now.Hour - work.StartTime.Hour;
-            int minutesPassed = DateTime.Now.Minute - work.StartTime.Minute;
+            FormattedTime formattedTime;
+            formattedTime = this.FormatTime();
 
-            if (hoursPassed > 1 || hoursPassed == 1 && minutesPassed >= 0)
-                work.HoursDone += hoursPassed;
-            /* see if the person broke the record hours */
-            if (hoursPassed > work.LongestStreak)
-                if (minutesPassed < 0)
-                    work.LongestStreak = --hoursPassed;
-                else
-                    work.LongestStreak = hoursPassed;
-
-            /*if (Math.Abs(minutesPassed) > work.LongestStreak)
-                if (minutesPassed < 0)
-                    work.LongestStreak = --minutesPassed;
-                else
-                    work.LongestStreak = minutesPassed;
-
-            if (Math.Abs(minutesPassed) >= 1)
-                work.HoursDone += Math.Abs(minutesPassed); */
-
+            if (!session.InProgress)
+                textBlockStartTime.Text = "not started yet";
+            else
+                textBlockStartTime.Text = formattedTime.Hours + ":" + formattedTime.Minutes + ":" + formattedTime.Seconds;
         }
 
         /* update the frame */
         private void SetStatistics()
         {
-            FormattedTime formattedTime;
-
-            textBlockHoursDone.Text = work.HoursDone.ToString() + " out of 20 hours";
-            textBlockLongestStreak.Text = work.LongestStreak.ToString() + " hours";
-
-            formattedTime = FormatTime();
-
-            if (!work.InProgress)
-                textBlockStartTime.Text = "not started yet";
-            else
-                textBlockStartTime.Text = formattedTime.Hours + ":" + formattedTime.Minutes + ":" + formattedTime.Seconds;           
+            textBlockHoursDone.Text = session.HoursDone.ToString() + " out of 20 hours";
+            textBlockLongestStreak.Text = session.LongestStreak.ToString() + " hours";
         }
 
         /* format time so that it will be displayed correctly*/
@@ -131,22 +135,32 @@ namespace TeacherTimer
         {
             FormattedTime formattedTime = new FormattedTime();
 
-            if (work.StartTime.Hour < 10)
-                formattedTime.Hours = "0" + work.StartTime.Hour.ToString();
+            if (session.FirstTime.Hour < 10)
+                formattedTime.Hours = "0" + session.FirstTime.Hour.ToString();
             else
-                formattedTime.Hours = work.StartTime.Hour.ToString();
+                formattedTime.Hours = session.FirstTime.Hour.ToString();
 
-            if(work.StartTime.Minute < 10)
-                formattedTime.Minutes = "0" + work.StartTime.Minute.ToString();
+            if (session.FirstTime.Minute < 10)
+                formattedTime.Minutes = "0" + session.FirstTime.Minute.ToString();
             else
-                formattedTime.Minutes = work.StartTime.Minute.ToString();
+                formattedTime.Minutes = session.FirstTime.Minute.ToString();
 
-            if(work.StartTime.Second < 10)
-                formattedTime.Seconds = "0" + work.StartTime.Second.ToString();
+            if (session.FirstTime.Second < 10)
+                formattedTime.Seconds = "0" + session.FirstTime.Second.ToString();
             else
-                formattedTime.Seconds = work.StartTime.Second.ToString();
+                formattedTime.Seconds = session.FirstTime.Second.ToString();
 
             return formattedTime;
+        }
+
+        private async void resetButton_Click(object sender, RoutedEventArgs e)
+        {
+            work.Reset();
+            this.SetStatistics();
+            this.SetFirstTime();
+            actionButton.Icon = new SymbolIcon(Symbol.Play);            
+            /* save data into a json file */
+            await fileSerivce.WriteJsonAsync(session);
         }
     }
 }

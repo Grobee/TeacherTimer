@@ -12,11 +12,12 @@
         <CommandBar Height="41"
                     Foreground="{ThemeResource PhoneAccentBrush}">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="about"
-                              x:Name="aboutButton"/>
+                <AppBarButton x:ConnectionId='1' Label="reset"
+                              x:Name="resetButton"
+                                                       />
             </CommandBar.SecondaryCommands>
             
-            <AppBarButton x:ConnectionId='1' Icon="Play" 
+            <AppBarButton x:ConnectionId='2' Icon="Play" 
                           x:Name="actionButton"                           />
         </CommandBar>
     </Page.BottomAppBar>
@@ -133,6 +134,7 @@
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
+            <TextBlock x:Name="intervalTime" HorizontalAlignment="Left" Margin="97,25.667,0,0" Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         </Grid>           
     </Grid>
 </Page>

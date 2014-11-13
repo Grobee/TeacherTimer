@@ -14,31 +14,31 @@ namespace TeacherTimer
     {
         const string JSONFILENAME = "data.json";        
 
-        public async Task WriteJsonAsync(Work work)
+        public async Task WriteJsonAsync(Session work)
         {
-            var serializer = new DataContractJsonSerializer(typeof(Work));
+            var serializer = new DataContractJsonSerializer(typeof(Session));
             using(var stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(JSONFILENAME, CreationCollisionOption.ReplaceExisting))
             {
                 serializer.WriteObject(stream, work);
             }
         }
 
-        public async Task<Work> ReadJsonAsync()
+        public async Task<Session> ReadJsonAsync()
         {
-            Work work;
+            Session work;
 
-            var serializer = new DataContractJsonSerializer(typeof(Work));
+            var serializer = new DataContractJsonSerializer(typeof(Session));
             try
             {
                 using (var stream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(JSONFILENAME))
                 {
-                    work = (Work)serializer.ReadObject(stream);
+                    work = (Session)serializer.ReadObject(stream);
                 }
                 return work;
             }
             catch (FileNotFoundException)
             {
-                return new Work()
+                return new Session()
                 {
                     ElapsedHours = 0,
                     ElapsedMinutes = 0,

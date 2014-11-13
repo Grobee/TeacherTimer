@@ -69,3 +69,9 @@ D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\qualifiers.txt
 D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\qualifiers.txt.intermediate
 D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\ProjectArchitectures.txt
+D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\Newtonsoft.Json.dll
+D:\Programming\C#\WinPhone\TeacherTimer\bin\Debug\BasicPage1.xbf
+D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\BasicPage1.g.i.cs
+D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\BasicPage1.g.cs
+D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\BasicPage1.xaml
+D:\Programming\C#\WinPhone\TeacherTimer\obj\Debug\BasicPage1.xbf

@@ -43,7 +43,7 @@ namespace TeacherTimer
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
@@ -52,7 +52,7 @@ namespace TeacherTimer
             }
 #endif
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            Frame rootFrame = Window.Current.Content as Frame;            
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -61,12 +61,14 @@ namespace TeacherTimer
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
+                //TeacherTimer.Common.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
                 // TODO: change this value to a cache size that is appropriate for your application
                 rootFrame.CacheSize = 1;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     // TODO: Load state from previously suspended application
+                    //await TeacherTimer.Common.SuspensionManager.RestoreAsync();
                 }
 
                 // Place the frame in the current Window
@@ -120,11 +122,13 @@ namespace TeacherTimer
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
             // TODO: Save application state and stop any background activity
+            //await TeacherTimer.Common.SuspensionManager.SaveAsync();
+
             deferral.Complete();
         }
     }
