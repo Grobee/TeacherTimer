@@ -103,7 +103,7 @@ namespace TeacherTimer
 
             /* complex algorithm to count the hours done*/
             if (session.ElapsedHours - session.PreviousElapsedHours > 1)
-                session.HoursDone += session.ElapsedHours;
+                session.HoursDone += session.ElapsedHours - session.PreviousElapsedHours;
             else if (session.ElapsedHours - session.PreviousElapsedHours == 0)
                 session.HoursDone = session.HoursDone;
             else if (session.ElapsedHours - session.PreviousElapsedHours == 1)
@@ -112,7 +112,7 @@ namespace TeacherTimer
             session.PreviousElapsedHours = session.ElapsedHours;
 
             /* set the longest streak */
-            session.LongestStreak = session.ElapsedMinutes.CompareTo(session.LongestStreak) > 0 ? session.ElapsedMinutes : session.LongestStreak;
+            session.LongestStreak = session.ElapsedHours.CompareTo(session.LongestStreak) > 0 ? session.ElapsedHours : session.LongestStreak;
 
             /* set text */
             textBlockHoursDone.Text = session.HoursDone + " out of 20 hours";
