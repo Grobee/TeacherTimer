@@ -10,10 +10,10 @@ namespace TeacherTimer
     {
         public int HoursDone { get; set; }
         public int LongestStreak { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime FirstTime { get; set; }
         public int ElapsedHours { get; set; }
         public int ElapsedMinutes { get; set; }
+        public int PreviousElapsedHours { get; set; }
+        public DateTime StartTime { get; set; }
         public bool InProgress { get; set; }
     }
 }

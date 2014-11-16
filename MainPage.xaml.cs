@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -17,150 +18,106 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TeacherTimer
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
+        FileService fileService;
         Work work;
         Session session;
-        FileService fileSerivce;
         DispatcherTimer timer;
-
-        struct FormattedTime
-        {
-            public string Hours { get; set; }
-            public string Minutes { get; set; }
-            public string Seconds { get; set; }
-        };
 
         public MainPage()
         {
             this.InitializeComponent();
-
-            this.NavigationCacheMode = NavigationCacheMode.Required;            
+            this.NavigationCacheMode = NavigationCacheMode.Required;             
             
-            fileSerivce = new FileService();
-            timer = new DispatcherTimer();            
+            /* initialize the attributes */            
+            fileService = new FileService();
+            work = new Work();
+
+            /* event handlers */
+            actionButton.Click += (s, e) =>
+            {
+                if (!session.InProgress)
+                    this.StartWork();
+                else
+                    this.StopWork();
+            };
+
+            resetButton.Click += (s, e) => this.ResetWork();
+
+            /* initialize the timer */
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Tick += (s, e) => CountAndSetText();            
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        async protected override void OnNavigatedTo(NavigationEventArgs e) 
         {
-            session = await fileSerivce.ReadJsonAsync();
-            /*session = new Session()
-            {
-                ElapsedHours = 0,
-                ElapsedMinutes = 0,
-                HoursDone = 0,
-                InProgress = false,
-                LongestStreak = 0,
-                StartTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0)
-            };*/
-            work = new Work(ref session);
-            this.SetStatistics();
-            this.SetFirstTime();
+            session = await fileService.ReadJsonAsync();
+
+            if (session.InProgress)
+                this.ContinueWork();
+            else
+                /* set the text of the text controllers */
+                this.CountAndSetText();            
         }
- 
-        private void SetTimer()
+
+        /* do some work */
+        async private void StartWork()
         {
-            /* count the time that is still remaining from the one hour interval */
-            int doneHours = session.ElapsedMinutes == 0 ? 0 : 1;
-            int doneMinutes = session.ElapsedMinutes == 0 ? 60 : session.ElapsedMinutes;
-            /* set the interval */
-            //timer.Interval = new TimeSpan(1 - doneHours, 60 - doneMinutes, 0);
-            timer.Interval = new TimeSpan(0, 0, 30);
-            //intervalTime.Text = timer.Interval.Hours + " " + timer.Interval.Minutes;
-            //intervalTime.Text = session.ElapsedHours + " " + session.ElapsedMinutes;
-            intervalTime.Text = timer.Interval.Minutes + " " + timer.Interval.Seconds;
+            work.Start(ref session);
             timer.Start();
-            timer.Tick += (o, i) =>
-            {
-                work.CheckTime();
-                this.SetStatistics();
-                this.SetTimer();
-            };                
+            actionButton.Icon = new SymbolIcon(Symbol.Stop);
+            this.CountAndSetText();
+            await fileService.WriteJsonAsync(session);
         }
-    
-        private async void actionButton_Click(object sender, RoutedEventArgs e)
+
+        private void ContinueWork()
         {
-            if (!session.InProgress)
-            {                
-                actionButton.Icon = new SymbolIcon(Symbol.Pause);
-                work.Start();
-                /* set the various textblock texts */
-                this.SetFirstTime();
-                this.SetTimer();
-                this.SetStatistics();
-                /* save the data to a json file */
-                await fileSerivce.WriteJsonAsync(session);
-            }                
-            else
-            {
-                actionButton.Icon = new SymbolIcon(Symbol.Play);                               
-                work.Stop();
-                work.CheckLongestStreak();
-                /* set the various textblock texts */
-                this.SetFirstTime();
-                this.SetStatistics();
-                /* save the data to a json file */
-                await fileSerivce.WriteJsonAsync(session);    
-            }
+            timer.Start();
+            actionButton.Icon = new SymbolIcon(Symbol.Stop);
+            this.CountAndSetText();
         }
-    
-        private void SetFirstTime()
+
+        private void StopWork()
         {
-            FormattedTime formattedTime;
-            formattedTime = this.FormatTime();
-
-            if (!session.InProgress)
-                textBlockStartTime.Text = "not started yet";
-            else
-                textBlockStartTime.Text = formattedTime.Hours + ":" + formattedTime.Minutes + ":" + formattedTime.Seconds;
+            work.Stop(ref session);
+            timer.Stop();
+            actionButton.Icon = new SymbolIcon(Symbol.Play);
         }
 
-        /* update the frame */
-        private void SetStatistics()
+        async private void ResetWork()
         {
-            textBlockHoursDone.Text = session.HoursDone.ToString() + " out of 20 hours";
-            textBlockLongestStreak.Text = session.LongestStreak.ToString() + " hours";
+            work.Reset(ref session);
+            actionButton.Icon = new SymbolIcon(Symbol.Play);
+            this.CountAndSetText();
+            await fileService.WriteJsonAsync(session);
         }
 
-        /* format time so that it will be displayed correctly*/
-        private FormattedTime FormatTime()
+        /* set the text controlls' text */
+        private void CountAndSetText()
         {
-            FormattedTime formattedTime = new FormattedTime();
+            /* count */
+            session.ElapsedHours = session.StartTime.Equals(DateTime.MinValue) ? 0 : DateTime.Now.Hour - session.StartTime.Hour;
+            session.ElapsedMinutes = session.StartTime.Equals(DateTime.MinValue) ? 0 : DateTime.Now.Minute - session.StartTime.Minute;            
 
-            if (session.FirstTime.Hour < 10)
-                formattedTime.Hours = "0" + session.FirstTime.Hour.ToString();
-            else
-                formattedTime.Hours = session.FirstTime.Hour.ToString();
+            /* complex algorithm to count the hours done*/
+            if (session.ElapsedHours - session.PreviousElapsedHours > 1)
+                session.HoursDone += session.ElapsedHours;
+            else if (session.ElapsedHours - session.PreviousElapsedHours == 0)
+                session.HoursDone = session.HoursDone;
+            else if (session.ElapsedHours - session.PreviousElapsedHours == 1)
+                ++session.HoursDone;
 
-            if (session.FirstTime.Minute < 10)
-                formattedTime.Minutes = "0" + session.FirstTime.Minute.ToString();
-            else
-                formattedTime.Minutes = session.FirstTime.Minute.ToString();
+            session.PreviousElapsedHours = session.ElapsedHours;
 
-            if (session.FirstTime.Second < 10)
-                formattedTime.Seconds = "0" + session.FirstTime.Second.ToString();
-            else
-                formattedTime.Seconds = session.FirstTime.Second.ToString();
+            /* set the longest streak */
+            session.LongestStreak = session.ElapsedMinutes.CompareTo(session.LongestStreak) > 0 ? session.ElapsedMinutes : session.LongestStreak;
 
-            return formattedTime;
-        }
-
-        private async void resetButton_Click(object sender, RoutedEventArgs e)
-        {
-            work.Reset();
-            this.SetStatistics();
-            this.SetFirstTime();
-            actionButton.Icon = new SymbolIcon(Symbol.Play);            
-            /* save data into a json file */
-            await fileSerivce.WriteJsonAsync(session);
-        }
+            /* set text */
+            textBlockHoursDone.Text = session.HoursDone + " out of 20 hours";
+            textBlockLongestStreak.Text = session.LongestStreak + " hours";
+            textBlockStartTime.Text = session.StartTime.Hour + ":" + session.StartTime.Minute + ":" + session.StartTime.Second;
+        }        
     }
 }

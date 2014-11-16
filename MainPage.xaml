@@ -13,12 +13,11 @@
                     Foreground="{ThemeResource PhoneAccentBrush}">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="reset"
-                              x:Name="resetButton"
-                              Click="resetButton_Click"/>
+                              x:Name="resetButton" />
             </CommandBar.SecondaryCommands>
             
             <AppBarButton Icon="Play" 
-                          x:Name="actionButton" Click="actionButton_Click"/>
+                          x:Name="actionButton" />
         </CommandBar>
     </Page.BottomAppBar>
 
@@ -49,7 +48,7 @@
                 <!-- text definitons -->
                 <!-- application name -->
                 <TextBlock Grid.Row="0"
-                           Text="TEACHERTIMER"
+                           Text="teachertimer"
                            Margin="10,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
@@ -75,6 +74,7 @@
                            Margin="25,0,0,0"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                
                 <TextBlock Grid.Row="1" 
                            Text="done this week"
                            Margin="50,0,0,0"
