@@ -17,21 +17,22 @@ namespace TeacherTimer
         /* stop the work session */
         public void Stop(ref Session session)
         {
+            session.StartTime = DateTime.MinValue;
+            session.ElapsedTime = TimeSpan.Zero;
+            session.LastTime = TimeSpan.Zero;
             session.InProgress = false;
-            session.PreviousElapsedHours = 0;
         }
         /* reset the work session */
         public void Reset(ref Session session)
         {
             session = new Session()
-            {
-                HoursDone = 0,
-                ElapsedHours = 0,
-                ElapsedMinutes = 0,
-                PreviousElapsedHours = 0,
-                InProgress = false,
-                LongestStreak = 0,
-                StartTime = DateTime.MinValue                
+            {   
+                StartTime = DateTime.MinValue,
+                ElapsedTime = TimeSpan.Zero,
+                TimeDone = TimeSpan.Zero,
+                LastTime = TimeSpan.Zero,
+                LongestStreak = TimeSpan.Zero,
+                InProgress = false                            
             };
         }        
     }

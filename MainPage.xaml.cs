@@ -14,8 +14,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
-
 namespace TeacherTimer
 {
     public sealed partial class MainPage : Page
@@ -24,11 +22,12 @@ namespace TeacherTimer
         Work work;
         Session session;
         DispatcherTimer timer;
+        DispatcherTimer writeTimer;
 
         public MainPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;             
+            this.NavigationCacheMode = NavigationCacheMode.Required;    
             
             /* initialize the attributes */            
             fileService = new FileService();
@@ -47,8 +46,13 @@ namespace TeacherTimer
 
             /* initialize the timer */
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
-            timer.Tick += (s, e) => CountAndSetText();            
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += (s, e) => CountAndSetText();
+
+            /* initialize the automatic save */
+            writeTimer = new DispatcherTimer();
+            writeTimer.Interval = new TimeSpan(0, 0, 30);
+            writeTimer.Tick += async (s, e) => await fileService.WriteJsonAsync(session);
         }
 
         async protected override void OnNavigatedTo(NavigationEventArgs e) 
@@ -57,8 +61,7 @@ namespace TeacherTimer
 
             if (session.InProgress)
                 this.ContinueWork();
-            else
-                /* set the text of the text controllers */
+            else                
                 this.CountAndSetText();            
         }
 
@@ -79,18 +82,20 @@ namespace TeacherTimer
             this.CountAndSetText();
         }
 
-        private void StopWork()
+        async private void StopWork()
         {
-            work.Stop(ref session);
             timer.Stop();
+            work.Stop(ref session);
+            this.CountAndSetText();
             actionButton.Icon = new SymbolIcon(Symbol.Play);
+            await fileService.WriteJsonAsync(session);
         }
 
         async private void ResetWork()
         {
             work.Reset(ref session);
             actionButton.Icon = new SymbolIcon(Symbol.Play);
-            this.CountAndSetText();
+            this.CountAndSetText();            
             await fileService.WriteJsonAsync(session);
         }
 
@@ -98,26 +103,39 @@ namespace TeacherTimer
         private void CountAndSetText()
         {
             /* count */
-            session.ElapsedHours = session.StartTime.Equals(DateTime.MinValue) ? 0 : DateTime.Now.Hour - session.StartTime.Hour;
-            session.ElapsedMinutes = session.StartTime.Equals(DateTime.MinValue) ? 0 : DateTime.Now.Minute - session.StartTime.Minute;            
+            if (session.InProgress)
+            {                
+                session.ElapsedTime = session.StartTime.Equals(DateTime.MinValue) ? TimeSpan.Zero : DateTime.Now.Subtract(session.StartTime);
 
-            /* complex algorithm to count the hours done*/
-            if (session.ElapsedHours - session.PreviousElapsedHours > 1)
-                session.HoursDone += session.ElapsedHours - session.PreviousElapsedHours;
-            else if (session.ElapsedHours - session.PreviousElapsedHours == 0)
-                session.HoursDone = session.HoursDone;
-            else if (session.ElapsedHours - session.PreviousElapsedHours == 1)
-                ++session.HoursDone;
-
-            session.PreviousElapsedHours = session.ElapsedHours;
+                if(session.TimeDone.CompareTo(session.ElapsedTime) < 0)
+                    session.TimeDone = session.TimeDone.Add(session.ElapsedTime.Subtract(session.TimeDone));
+                else
+                {
+                    session.TimeDone = session.TimeDone.Add(session.ElapsedTime.Subtract(session.LastTime));
+                    session.LastTime = session.ElapsedTime;
+                }
+            }
 
             /* set the longest streak */
-            session.LongestStreak = session.ElapsedHours.CompareTo(session.LongestStreak) > 0 ? session.ElapsedHours : session.LongestStreak;
+            session.LongestStreak = session.ElapsedTime.CompareTo(session.LongestStreak) > 0 ? session.ElapsedTime : session.LongestStreak;
 
             /* set text */
-            textBlockHoursDone.Text = session.HoursDone + " out of 20 hours";
-            textBlockLongestStreak.Text = session.LongestStreak + " hours";
-            textBlockStartTime.Text = session.StartTime.Hour + ":" + session.StartTime.Minute + ":" + session.StartTime.Second;
-        }        
+            textBlockHoursDone.Text = this.FormatTime(session.TimeDone.Hours) + ":" + this.FormatTime(session.TimeDone.Minutes) + ":" + this.FormatTime(session.TimeDone.Seconds);
+            textBlockLongestStreak.Text = this.FormatTime(session.LongestStreak.Hours) + ":" + this.FormatTime(session.LongestStreak.Minutes) + ":" + this.FormatTime(session.LongestStreak.Seconds);
+            textBlockStartTime.Text = !session.InProgress ? "not started yet" : this.FormatTime(session.StartTime.Hour) + ":" + this.FormatTime(session.StartTime.Minute) + ":" + this.FormatTime(session.StartTime.Second);
+            textBlockElapsedTime.Text = !session.InProgress ? "not started yet" : this.FormatTime(session.ElapsedTime.Hours) + ":" + this.FormatTime(session.ElapsedTime.Minutes) + ":" + this.FormatTime(session.ElapsedTime.Seconds);
+        }
+
+        private string FormatTime(int time)
+        {
+            string formattedTime;
+
+            if (time < 10)
+                formattedTime = "0" + time;
+            else
+                formattedTime = time.ToString();
+
+            return formattedTime;
+        }
     }
 }

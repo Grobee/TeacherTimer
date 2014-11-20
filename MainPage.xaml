@@ -10,7 +10,7 @@
     <!-- the bottom bar -->
     <Page.BottomAppBar>
         <CommandBar Height="41"
-                    Foreground="{ThemeResource PhoneAccentBrush}">
+                    Foreground="{ThemeResource GeneralBrush}">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="reset"
                               x:Name="resetButton" />
@@ -50,12 +50,12 @@
                 <TextBlock Grid.Row="0"
                            Text="teachertimer"
                            Margin="10,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
                 <TextBlock Grid.Row="1" 
                            Text="statistics"
                            Margin="50,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource HeaderTextBlockStyle}"/>
             </Grid>
 
@@ -70,15 +70,15 @@
                 <!-- text definitons -->                
                 <TextBlock x:Name="textBlockHoursDone"
                            Grid.Row="0"
-                           Text="15 out of 20 hours"
+                           Text="00 out of 20 hours"
                            Margin="25,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
                 
                 <TextBlock Grid.Row="1" 
-                           Text="done this week"
+                           Text="out of 20 hours done"
                            Margin="50,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
         </Grid>
@@ -102,14 +102,14 @@
                 <!-- text definitons -->
                 <TextBlock x:Name="textBlockLongestStreak"
                            Grid.Row="0"
-                           Text="5 hours"
+                           Text="05 hours"
                            Margin="25,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="1" 
                            Text="longest streak"
                            Margin="50,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
 
@@ -117,8 +117,8 @@
             <!-- start time -->
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />                    
                 </Grid.RowDefinitions>
 
                 <!-- text definitons -->
@@ -126,12 +126,35 @@
                            Grid.Row="0"
                            Text="21:59:11"
                            Margin="25,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
                        Style="{ThemeResource SubheaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="1" 
                            Text="start time"
                            Margin="50,0,0,0"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Foreground="{ThemeResource GeneralBrush}"
+                           Style="{ThemeResource BaseTextBlockStyle}"/>                        
+                
+            </Grid>
+
+            <!-- two part grid for some text -->
+            <!-- current time -->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <TextBlock x:Name="textBlockElapsedTime"
+                           Grid.Row="0"
+                           Text="22:59:15"
+                           Margin="25,0,0,0"
+                           Foreground="{ThemeResource GeneralBrush}"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                
+                <TextBlock Grid.Row="1" 
+                           Text="elapsed time"
+                           Margin="50,0,0,0"
+                           Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
         </Grid>           
