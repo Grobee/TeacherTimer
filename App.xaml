@@ -8,6 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <Brush x:Key="GeneralBrush">#FF008A00</Brush>
+            <Brush x:Key="DarkerGeneralBrush">#FF004000</Brush>
         </ResourceDictionary>
     </Application.Resources>
 

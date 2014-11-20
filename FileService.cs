@@ -12,7 +12,7 @@ namespace TeacherTimer
 {
     class FileService    
     {
-        const string JSONFILENAME = "datafi.json";        
+        const string JSONFILENAME = "datafile.json";        
 
         public async Task WriteJsonAsync(Session work)
         {
@@ -42,8 +42,8 @@ namespace TeacherTimer
                 {
                     StartTime = DateTime.MinValue,
                     ElapsedTime = TimeSpan.Zero,
+                    TotalTime = TimeSpan.Zero,
                     LongestStreak = TimeSpan.Zero,
-                    LastTime = TimeSpan.Zero,                    
                     InProgress = false
                 };
             }

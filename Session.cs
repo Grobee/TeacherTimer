@@ -10,8 +10,7 @@ namespace TeacherTimer
     {        
         public DateTime StartTime { get; set; }
         public TimeSpan ElapsedTime { get; set; }
-        public TimeSpan LastTime { get; set; }
-        public TimeSpan TimeDone { get; set; }
+        public TimeSpan TotalTime { get; set; }
         public TimeSpan LongestStreak { get; set; }
         public bool InProgress { get; set; }
     }

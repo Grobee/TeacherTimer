@@ -22,7 +22,6 @@ namespace TeacherTimer
         Work work;
         Session session;
         DispatcherTimer timer;
-        DispatcherTimer writeTimer;
 
         public MainPage()
         {
@@ -48,21 +47,16 @@ namespace TeacherTimer
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += (s, e) => CountAndSetText();
-
-            /* initialize the automatic save */
-            writeTimer = new DispatcherTimer();
-            writeTimer.Interval = new TimeSpan(0, 0, 30);
-            writeTimer.Tick += async (s, e) => await fileService.WriteJsonAsync(session);
         }
 
-        async protected override void OnNavigatedTo(NavigationEventArgs e) 
+        async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             session = await fileService.ReadJsonAsync();
 
             if (session.InProgress)
                 this.ContinueWork();
             else                
-                this.CountAndSetText();            
+                this.CountAndSetText(); 
         }
 
         /* do some work */
@@ -86,13 +80,14 @@ namespace TeacherTimer
         {
             timer.Stop();
             work.Stop(ref session);
-            this.CountAndSetText();
+            this.SetDefaultText();
             actionButton.Icon = new SymbolIcon(Symbol.Play);
             await fileService.WriteJsonAsync(session);
         }
 
         async private void ResetWork()
         {
+            timer.Stop();
             work.Reset(ref session);
             actionButton.Icon = new SymbolIcon(Symbol.Play);
             this.CountAndSetText();            
@@ -103,27 +98,22 @@ namespace TeacherTimer
         private void CountAndSetText()
         {
             /* count */
-            if (session.InProgress)
-            {                
-                session.ElapsedTime = session.StartTime.Equals(DateTime.MinValue) ? TimeSpan.Zero : DateTime.Now.Subtract(session.StartTime);
-
-                if(session.TimeDone.CompareTo(session.ElapsedTime) < 0)
-                    session.TimeDone = session.TimeDone.Add(session.ElapsedTime.Subtract(session.TimeDone));
-                else
-                {
-                    session.TimeDone = session.TimeDone.Add(session.ElapsedTime.Subtract(session.LastTime));
-                    session.LastTime = session.ElapsedTime;
-                }
-            }
+            if(session.InProgress) session.ElapsedTime = session.StartTime.Equals(DateTime.MinValue) ? TimeSpan.Zero : DateTime.Now.Subtract(session.StartTime);   
 
             /* set the longest streak */
             session.LongestStreak = session.ElapsedTime.CompareTo(session.LongestStreak) > 0 ? session.ElapsedTime : session.LongestStreak;
 
             /* set text */
-            textBlockHoursDone.Text = this.FormatTime(session.TimeDone.Hours) + ":" + this.FormatTime(session.TimeDone.Minutes) + ":" + this.FormatTime(session.TimeDone.Seconds);
+            textBlockHoursDone.Text = this.FormatTime(session.ElapsedTime.Add(session.TotalTime).Hours) + ":" + this.FormatTime(session.ElapsedTime.Add(session.TotalTime).Minutes) + ":" + this.FormatTime(session.ElapsedTime.Add(session.TotalTime).Seconds);
             textBlockLongestStreak.Text = this.FormatTime(session.LongestStreak.Hours) + ":" + this.FormatTime(session.LongestStreak.Minutes) + ":" + this.FormatTime(session.LongestStreak.Seconds);
             textBlockStartTime.Text = !session.InProgress ? "not started yet" : this.FormatTime(session.StartTime.Hour) + ":" + this.FormatTime(session.StartTime.Minute) + ":" + this.FormatTime(session.StartTime.Second);
             textBlockElapsedTime.Text = !session.InProgress ? "not started yet" : this.FormatTime(session.ElapsedTime.Hours) + ":" + this.FormatTime(session.ElapsedTime.Minutes) + ":" + this.FormatTime(session.ElapsedTime.Seconds);
+        }
+
+        private void SetDefaultText()
+        {
+            textBlockStartTime.Text = "not started yet";
+            textBlockElapsedTime.Text = "not started yet";
         }
 
         private string FormatTime(int time)

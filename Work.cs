@@ -17,9 +17,9 @@ namespace TeacherTimer
         /* stop the work session */
         public void Stop(ref Session session)
         {
+            session.TotalTime = session.TotalTime.Add(session.ElapsedTime);
             session.StartTime = DateTime.MinValue;
             session.ElapsedTime = TimeSpan.Zero;
-            session.LastTime = TimeSpan.Zero;
             session.InProgress = false;
         }
         /* reset the work session */
@@ -29,8 +29,7 @@ namespace TeacherTimer
             {   
                 StartTime = DateTime.MinValue,
                 ElapsedTime = TimeSpan.Zero,
-                TimeDone = TimeSpan.Zero,
-                LastTime = TimeSpan.Zero,
+                TotalTime = TimeSpan.Zero,
                 LongestStreak = TimeSpan.Zero,
                 InProgress = false                            
             };

@@ -15,148 +15,129 @@
                 <AppBarButton Label="reset"
                               x:Name="resetButton" />
             </CommandBar.SecondaryCommands>
-            
+
             <AppBarButton Icon="Play" 
                           x:Name="actionButton" />
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid>
-        <!-- Grid definitions -->
-        <!-- Main grid -->
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />            
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <!-- first subgrid -->
-        <Grid Grid.Row="0">
+
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="TEACHERTIMER" 
+                       Foreground="{ThemeResource GeneralBrush}" 
+                       Style="{ThemeResource TitleTextBlockStyle}" 
+                       Margin="0,12,0,0"/>
+            
+            <TextBlock Text="statistics" 
+                       Margin="0,-6.5,0,26.5" 
+                       Foreground="{ThemeResource GeneralBrush}" 
+                       Style="{ThemeResource HeaderTextBlockStyle}" 
+                       CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        </StackPanel>
+
+        <!-- CONTENT-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,25,19,90">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>           
-
-            <!-- two part grid for some text -->
-            <!-- title and etc -->
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="3*" />
-                </Grid.RowDefinitions>
-
-                <!-- text definitons -->
-                <!-- application name -->
-                <TextBlock Grid.Row="0"
-                           Text="teachertimer"
-                           Margin="10,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                           Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
-                <TextBlock Grid.Row="1" 
-                           Text="statistics"
-                           Margin="50,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                           Style="{ThemeResource HeaderTextBlockStyle}"/>
-            </Grid>
-
-            <!-- two part grid for some text -->
-            <!-- hours done this week -->
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-
-                <!-- text definitons -->                
-                <TextBlock x:Name="textBlockHoursDone"
-                           Grid.Row="0"
-                           Text="00 out of 20 hours"
-                           Margin="25,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                           Style="{ThemeResource SubheaderTextBlockStyle}"/>
-                
-                <TextBlock Grid.Row="1" 
-                           Text="out of 20 hours done"
-                           Margin="50,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                           Style="{ThemeResource BaseTextBlockStyle}"/>
-            </Grid>
-        </Grid>
-
-        <!-- second subgrid -->        
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- two part grid for some text -->
-            <!-- best streak -->
+            <!-- first row -->
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+
+                <!-- text definitons -->
+                <TextBlock x:Name="textBlockHoursDone"
+                           Grid.Row="0"
+                           Text="05:15:25"
+                           Foreground="{ThemeResource GeneralBrush}"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"/>
+
+                <TextBlock Grid.Row="1" 
+                           Text="hours done this week"
+                           Foreground="{ThemeResource DarkerGeneralBrush}"
+                           Style="{ThemeResource BaseTextBlockStyle}"/>
+            </Grid>
+
+            <!-- second row -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
                 </Grid.RowDefinitions>
 
                 <!-- text definitons -->
                 <TextBlock x:Name="textBlockLongestStreak"
                            Grid.Row="0"
-                           Text="05 hours"
-                           Margin="25,0,0,0"
+                           Text="03:05:00"
                            Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
+
                 <TextBlock Grid.Row="1" 
                            Text="longest streak"
-                           Margin="50,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
+                           Foreground="{ThemeResource DarkerGeneralBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
 
-            <!-- two part grid for some text -->
-            <!-- start time -->
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />                    
-                </Grid.RowDefinitions>
-
-                <!-- text definitons -->
-                <TextBlock x:Name="textBlockStartTime"
-                           Grid.Row="0"
-                           Text="21:59:11"
-                           Margin="25,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                       Style="{ThemeResource SubheaderTextBlockStyle}"/>
-                <TextBlock Grid.Row="1" 
-                           Text="start time"
-                           Margin="50,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
-                           Style="{ThemeResource BaseTextBlockStyle}"/>                        
-                
-            </Grid>
-
-            <!-- two part grid for some text -->
-            <!-- current time -->
+            <!-- third row -->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
                 </Grid.RowDefinitions>
-                
+
+                <TextBlock x:Name="textBlockStartTime"
+                           Grid.Row="0"
+                           Text="21:59:11"
+                           Foreground="{ThemeResource GeneralBrush}"
+                           Style="{ThemeResource SubheaderTextBlockStyle}" TextTrimming="None"/>
+
+                <TextBlock Grid.Row="1" 
+                           Text="start time"
+                           Foreground="{ThemeResource DarkerGeneralBrush}"
+                           Style="{ThemeResource BaseTextBlockStyle}"/>
+            </Grid>
+
+            <!-- fourth row -->
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+
                 <TextBlock x:Name="textBlockElapsedTime"
                            Grid.Row="0"
                            Text="22:59:15"
-                           Margin="25,0,0,0"
                            Foreground="{ThemeResource GeneralBrush}"
                            Style="{ThemeResource SubheaderTextBlockStyle}"/>
-                
+
                 <TextBlock Grid.Row="1" 
                            Text="elapsed time"
-                           Margin="50,0,0,0"
-                           Foreground="{ThemeResource GeneralBrush}"
+                           Foreground="{ThemeResource DarkerGeneralBrush}"
                            Style="{ThemeResource BaseTextBlockStyle}"/>
             </Grid>
-        </Grid>           
+        </Grid>
     </Grid>
 </Page>
