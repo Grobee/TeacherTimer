@@ -1,1 +1,0 @@
-D:\Programming\C#\WinPhone\TeacherTimer\TeacherTimer.csproj;neutral
